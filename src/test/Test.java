@@ -2,14 +2,16 @@ package test;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Test {
+	static Random rd = new Random();
 	public static void main(String [] args) {
 //		ghiFile();
 //		docFile();
-		for(int i = 1; i<3;i++)
-		makeFile("C:\\Users\\phanv\\eclipse\\java-oxygen\\Work\\Lop2\\ChuongTrinhChinhKhoa\\Tuan"+i);
+		
+		System.out.println(Integer.toString(rd.nextInt(10)));
 		
 	}
 	
