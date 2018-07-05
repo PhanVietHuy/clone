@@ -49,16 +49,17 @@ public class Form extends JFrame {
 
 				String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36";
 
-				try {
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
-							.userAgent(userAgent).method(Connection.Method.GET).execute();
-
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
-							.cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", "nguyenvantai", "LoginForm[password]", "0967048347")
-							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
-							.followRedirects(true).timeout(30 * 1000).execute();
-					System.err.println(response.statusCode());
+				
+					try {
+						response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
+								.userAgent(userAgent).method(Connection.Method.GET).execute();
+						
+						response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
+								.cookies(response.cookies()).userAgent(userAgent)
+								.data("LoginForm[username]", "nguyenvantai", "LoginForm[password]", "0967048347")
+								.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
+								.followRedirects(true).timeout(30 * 1000).execute();
+						System.err.println(response.statusCode());
 
 					// getQuestionWeek("https://hocsinh.lika.edu.vn/classroom/subject?alias=toan&subject_id=1&week=9",
 					// userAgent);
@@ -81,20 +82,23 @@ public class Form extends JFrame {
 					// }
 
 					// for (int i = 0; i < 100; i++) {
-					getQuestion("Môn Toán - Tuần 9", "https://hocsinh.lika.edu.vn/practice/index?skill_id=9676",
-							userAgent);
+					// getQuestion("Môn Toán - Tuần 9",
+					// "https://hocsinh.lika.edu.vn/practice/index?skill_id=9676",
+					// userAgent);
+					try {
+						getQuestionWeek("https://hocsinh.lika.edu.vn/classroom/subject?alias=toan&subject_id=1&week=1",
+								userAgent);
+					} catch (JSONException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					// }
 
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				 
 
 				// Lấy thông tin của câu hỏi trong trang web
 
@@ -110,16 +114,24 @@ public class Form extends JFrame {
 		Element header = weeksDoc.selectFirst("h1[class=\"subject-name\"]");
 		String subjectWeek = header.text(); // Ten mon hoc va tuan
 		// System.out.println(subjectWeek);
-		Elements links = weeksDoc.select("div[class=subject-content] a");
+		Elements links = weeksDoc.select("div[class=\"skill-item col-lg-4 col-sm-6\"]");
 		for (Element link : links) {
-			String absHref = link.attr("abs:href");
-			for (int i = 0; i <= 20; i++) {
-				// TimeUnit.SECONDS.sleep(rd.nextInt(2));
-				String result = getQuestion(subjectWeek, absHref, userAgent);
-				if (result.equals("true"))
-					System.out.println(++count);
-				System.out.println("-----------------------------------------------------------------------");
+			Element done = link.selectFirst("div[class=\"skill-status\"] p");
+			if (!done.text().contains("Hoàn thành"))
+			{
+//				System.out.println(link.html());
+				Element absHrefElement = link.selectFirst("a");
+				System.out.println(absHrefElement.attr("abs:href"));
 			}
+			
+			// String absHref = link.attr("abs:href");
+			// for (int i = 0; i <= 20; i++) {
+			// // TimeUnit.SECONDS.sleep(rd.nextInt(2));
+			// String result = getQuestion(subjectWeek, absHref, userAgent);
+			// if (result.equals("true"))
+			// System.out.println(++count);
+			// System.out.println("-----------------------------------------------------------------------");
+			// }
 		}
 
 	}
@@ -151,12 +163,12 @@ public class Form extends JFrame {
 
 		String skill_name, id_string;
 		type = quiz_json.getInt("type");
-//		type = 1;
+		// type = 1;
 		String typeString = Integer.toString(type);
 		String id_quiz = Integer.toString(quiz_json.getInt("id_ques"));
 		id_ques = quiz_json.getInt("id");
 		String id_ques_string = Integer.toString(id_ques);
-//		id_ques = 75927;
+		// id_ques = 75927;
 		// System.out.println(id_ques);
 		id_string = Integer.toString(id_ques);
 		id_skill = quiz_json.getInt("id_skill");
@@ -308,9 +320,10 @@ public class Form extends JFrame {
 				}
 				String numRan = Integer.toString(rd.nextInt(10));
 				Document correctAnswerDoc = Jsoup.connect("https://hocsinh.lika.edu.vn/ajax/save-report-quiz-coolpoint")
-						.cookies(response.cookies()).data("id_question", id_quiz).data("answer", tempCorrectAnswerString)
-						.data("time", numRan).data("ketqua", status).data("is_quiz_level", "0")
-						.data("skill_id", Integer.toString(id_skill)).userAgent(userAgent).timeout(30 * 1000).post();
+						.cookies(response.cookies()).data("id_question", id_quiz)
+						.data("answer", tempCorrectAnswerString).data("time", numRan).data("ketqua", status)
+						.data("is_quiz_level", "0").data("skill_id", Integer.toString(id_skill)).userAgent(userAgent)
+						.timeout(30 * 1000).post();
 				System.out.println("?????????????????????????????????");
 				System.out.println("InforHack");
 				System.out.println("id_question: " + id_quiz);

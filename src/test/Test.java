@@ -6,12 +6,14 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Test {
-	static Random rd = new Random();
+	
 	public static void main(String [] args) {
 //		ghiFile();
 //		docFile();
-		
-		System.out.println(Integer.toString(rd.nextInt(10)));
+	for(int i = 0;i<10;i++) {
+		Random rd = new Random();
+		System.out.println(Integer.toString(rd.nextInt(2)));
+	}
 		
 	}
 	
