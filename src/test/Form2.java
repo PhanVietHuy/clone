@@ -46,12 +46,12 @@ import javax.swing.SwingConstants;
 public class Form2 extends JFrame {
 
 	private JPanel contentPane;
-	private static JTextField txtUser;
-	private static JTextField txtUrl;
+	private  JTextField txtUser;
+	private  JTextField txtUrl;
 	private static Connection.Response response;
 	private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36";
 	private static int count = 0;
-	private static JPasswordField passwordField;
+	private  JPasswordField passwordField;
 	private static JComboBox comboBox = new JComboBox<>();
 	static String divName = "box basic";
 	static Document pageUrl;
@@ -78,20 +78,6 @@ public class Form2 extends JFrame {
 				frame.setVisible(true);
 				Connection.Response loginForm;
 
-				try {
-					String url = txtUrl.getText();
-					response = Jsoup.connect(url).userAgent(userAgent).method(Connection.Method.GET).execute();
-					loginForm = Jsoup.connect(url).method(Connection.Method.GET).execute();
-
-					response = Jsoup.connect(url).cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
-									passwordField.getText())
-							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
-							.followRedirects(true).timeout(30 * 1000).execute();
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
 		});
 	}
@@ -178,19 +164,12 @@ public class Form2 extends JFrame {
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.err.println(response.statusCode());
+
 				try {
-					String responseUrl = "https://hocsinh.lika.edu.vn/site/login?student_id=3174";
+					String responseUrl = txtUrl.getText();
 					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
-					// response =
-					// Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-					// .data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
-					// passwordField.getText())
-					// .data("save_login",
-					// "1").followRedirects(false).method(Connection.Method.POST)
-					// .followRedirects(true).timeout(30 * 1000).execute();
 					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", "nguyenvantai", "LoginForm[password]", "0967048347")
+							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]", passwordField.getText())
 							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
 							.followRedirects(true).timeout(30 * 1000).execute();
 					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
@@ -218,7 +197,7 @@ public class Form2 extends JFrame {
 						comboMonhoc.addItem(listName.get(i));
 						hrefName.put(listName.get(i), listHref.get(i));
 					}
-
+					System.err.println(response.statusCode());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
