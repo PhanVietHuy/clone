@@ -39,17 +39,19 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import javafx.scene.control.PasswordField;
+
 import javax.swing.SwingConstants;
 
 public class Form2 extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtUser;
-	private JTextField txtUrl;
+	private static JTextField txtUser;
+	private static JTextField txtUrl;
 	private static Connection.Response response;
 	private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36";
 	private static int count = 0;
-	private JPasswordField passwordField;
+	private static JPasswordField passwordField;
 	private static JComboBox comboBox = new JComboBox<>();
 	static String divName = "box basic";
 	static Document pageUrl;
@@ -77,24 +79,19 @@ public class Form2 extends JFrame {
 				Connection.Response loginForm;
 
 				try {
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
-							.userAgent(userAgent).method(Connection.Method.GET).execute();
-					loginForm = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
-							.method(Connection.Method.GET).execute();
+					String url = txtUrl.getText();
+					response = Jsoup.connect(url).userAgent(userAgent).method(Connection.Method.GET).execute();
+					loginForm = Jsoup.connect(url).method(Connection.Method.GET).execute();
 
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3174")
-							.cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", "nguyenvantai", "LoginForm[password]", "0967048347")
+					response = Jsoup.connect(url).cookies(response.cookies()).userAgent(userAgent)
+							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
+									passwordField.getText())
 							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
 							.followRedirects(true).timeout(30 * 1000).execute();
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-				// Lấy thông tin của câu hỏi trong trang web
-
 			}
 		});
 	}
@@ -412,7 +409,7 @@ public class Form2 extends JFrame {
 			System.out.println(type + " | " + id_ques_string + " | " + id_skill + " | " + skill_name);
 
 			String listAnswerCorrectToString = "";
-			String status = "";
+
 			if (type == 3) // Dang trac nghiem
 			{
 				answerTemp = "C";
@@ -421,9 +418,11 @@ public class Form2 extends JFrame {
 						.data("id", id_string).ignoreContentType(true).timeout(30 * 1000).post();
 				if (!getAnswerDoc.body().text().equals("false")) {
 					String answerString = getAnswerDoc.body().text();
+
 					JSONObject answerJson = new JSONObject(answerString);
 					// System.out.println(answerJson);
 					answerTemp = answerJson.getString("note");
+
 				}
 
 				// Gửi đáp án
@@ -434,18 +433,11 @@ public class Form2 extends JFrame {
 				answerTemp = (answerTemp.equals("C") == true) ? "D" : "C";
 				String answerString = correctAnswerDoc.body().text();
 				System.out.println(answerString);
+
 				JSONObject answerJson = new JSONObject(answerString);
 				JSONArray correctAnswer = (JSONArray) answerJson.get("dapan_quiz");
 				tempCorrectAnswerString = correctAnswer.get(0).toString();
 				// System.out.println(tempCorrectAnswerString);
-				if (!answerJson.isNull("status_answer")) {
-					JSONObject statusJson = answerJson.getJSONObject("status_answer");
-					status = statusJson.toString();
-				}
-				if (!answerJson.isNull("status")) {
-					Integer statusJson = answerJson.getInt("status");
-					status = statusJson.toString();
-				}
 
 				giaithich = answerJson.getString("giaithich_quiz");
 
@@ -505,13 +497,11 @@ public class Form2 extends JFrame {
 					answerJson = new JSONObject(answerString);
 					giaithich = answerJson.getString("giaithich_quiz");
 					// System.out.println(giaithich);
-					JSONObject statusJson = answerJson.getJSONObject("status_answer");
-					status = statusJson.toString();
 
 					Element question = page.selectFirst("div[class=info]");
 					content = question.html();
 					// System.out.println(answerCorrectJson);
-				} else {
+				} else { // Xử lý các type khác
 
 				}
 			}
@@ -654,28 +644,31 @@ public class Form2 extends JFrame {
 					Element checkElement = pages.selectFirst("div[class=header]");
 					if (checkElement != null) {
 						Element checkImg = checkElement.selectFirst("img");
-//						System.out.println(checkImg.html());
+						// System.out.println(checkImg.html());
 						String imgCheck = checkImg.attr("src");
 						String absHref = "";
-//						System.out.println("img: "+imgCheck);
+						// System.out.println("img: "+imgCheck);
 						if (imgCheck.equals("/images/female_finish_challenge_200x188.jpg")) {
 							// System.out.println(imgCheck);
 							// TimeUnit.SECONDS.sleep(5);
 							Element pageChange = checkElement.selectFirst("a");
 							absHref = pageChange.attr("abs:href");
-//							 System.out.println("Link: "+absHref);
+							// System.out.println("Link: "+absHref);
+							TimeUnit.SECONDS.sleep(8);
 							getQuestion(subjectWeek, absHref, userAgent);
 							TimeUnit.SECONDS.sleep(8);
 							getQuestion(subjectWeek, absHref, userAgent);
 							return "Chuyển hướng+ " + absHref;
 						}
 					}
-					
 
 				}
 			}
+		} catch (org.json.JSONException e) {
+			System.out.println("Giải thích quá dài!");
 		}
 		return "";
-		
+
 	}
+
 }
