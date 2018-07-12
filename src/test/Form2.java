@@ -319,7 +319,7 @@ public class Form2 extends JFrame {
 				// System.out.println(link.html());
 				Element absHrefElement = link.selectFirst("a");
 				String absHref = absHrefElement.attr("abs:href");
-				System.out.println(absHref);
+//				System.out.println(absHref);
 				for (int i = 0; i < 50; i++) {
 					// TimeUnit.SECONDS.sleep(rd.nextInt(2));
 					String result = getQuestion(subjectWeek, absHref, userAgent);
