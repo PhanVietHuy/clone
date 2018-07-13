@@ -46,12 +46,12 @@ import javax.swing.SwingConstants;
 public class Form2 extends JFrame {
 
 	private JPanel contentPane;
-	private  JTextField txtUser;
-	private  JTextField txtUrl;
+	private JTextField txtUser;
+	private JTextField txtUrl;
 	private static Connection.Response response;
 	private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36";
 	private static int count = 0;
-	private  JPasswordField passwordField;
+	private JPasswordField passwordField;
 	private static JComboBox comboBox = new JComboBox<>();
 	static String divName = "box basic";
 	static Document pageUrl;
@@ -60,12 +60,13 @@ public class Form2 extends JFrame {
 	static TreeMap<String, String> hrefName = new TreeMap<String, String>();
 	static int false_num = 0;
 	static Random rd = new Random();
-	static int thematic_type = 0;
+	static int thematic_type = 1;
 	static int numRanInt = 0;
 	static int ketqua = 0;
 	static int point = 0;
 	static JComboBox comboMonhoc = new JComboBox();
-	static JLabel lblMonHoc = DefaultComponentFactory.getInstance().createTitle("Môn học");
+	static JComboBox comboWeek = new JComboBox<>();
+	public static JTextField txtUrlClass;
 
 	/**
 	 * Launch the application.
@@ -145,22 +146,10 @@ public class Form2 extends JFrame {
 				}
 			}
 		});
-		btnAllCB.setBounds(511, 107, 107, 20);
+		btnAllCB.setBounds(511, 156, 107, 20);
 		contentPane.add(btnAllCB);
-		JLabel label1 = new JLabel("Tên bài học");
-		label1.setBounds(158, 194, 71, 14);
-
-		contentPane.add(label1);
-
-		JLabel soLuongCu = new JLabel("0");
-		soLuongCu.setBounds(359, 239, 61, 14);
-		contentPane.add(soLuongCu);
-
-		JLabel soLuongMoi = new JLabel("0");
-		soLuongMoi.setBounds(482, 239, 71, 14);
-		contentPane.add(soLuongMoi);
 		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(680, 10, 146, 62);
+		btnSubmit.setBounds(719, 33, 92, 58);
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -169,11 +158,13 @@ public class Form2 extends JFrame {
 					String responseUrl = txtUrl.getText();
 					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
 					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]", passwordField.getText())
+							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
+									passwordField.getText())
 							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
 							.followRedirects(true).timeout(30 * 1000).execute();
-					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
-							.userAgent(userAgent).timeout(30 * 1000).get();
+					pageUrl = Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
+							.timeout(30 * 1000).get();
+					System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
 					// System.out.println(pageElement.html());
@@ -211,19 +202,11 @@ public class Form2 extends JFrame {
 		passwordField.setBounds(433, 52, 241, 20);
 		contentPane.add(passwordField);
 
-		JLabel lblSoluongCu = new JLabel("Số lượng cũ");
-		lblSoluongCu.setBounds(339, 194, 81, 14);
-		contentPane.add(lblSoluongCu);
-
-		JLabel lblSoLuongMoi = new JLabel("Số lượng mới");
-		lblSoLuongMoi.setBounds(453, 194, 87, 14);
-		contentPane.add(lblSoLuongMoi);
-
-		comboMonhoc.setBounds(127, 138, 226, 20);
+		comboMonhoc.setBounds(127, 187, 226, 20);
 		contentPane.add(comboMonhoc);
 
 		JComboBox comboChuongtrinh = new JComboBox();
-		comboChuongtrinh.setBounds(127, 107, 226, 20);
+		comboChuongtrinh.setBounds(127, 156, 226, 20);
 		contentPane.add(comboChuongtrinh);
 		comboChuongtrinh.addItem("Chương trình cơ bản");
 		comboChuongtrinh.addItem("Chương trình nâng cao");
@@ -268,11 +251,11 @@ public class Form2 extends JFrame {
 		});
 
 		JLabel lblChonChuongTrinh = new JLabel("Chọn chương trình");
-		lblChonChuongTrinh.setBounds(10, 110, 122, 14);
+		lblChonChuongTrinh.setBounds(10, 159, 122, 14);
 		contentPane.add(lblChonChuongTrinh);
 
 		JLabel lblChonMonHoc = new JLabel("Chọn môn học");
-		lblChonMonHoc.setBounds(10, 141, 122, 14);
+		lblChonMonHoc.setBounds(10, 190, 122, 14);
 		contentPane.add(lblChonMonHoc);
 
 		JButton btnSearch = new JButton("Search");
@@ -295,11 +278,27 @@ public class Form2 extends JFrame {
 
 			}
 		});
-		btnSearch.setBounds(409, 106, 89, 23);
+		btnSearch.setBounds(409, 155, 89, 23);
 		contentPane.add(btnSearch);
 
-		lblMonHoc.setBounds(168, 239, 88, 14);
-		contentPane.add(lblMonHoc);
+		JLabel lblLinkClass = new JLabel("Link Class");
+		lblLinkClass.setBounds(10, 99, 71, 14);
+		contentPane.add(lblLinkClass);
+
+		txtUrlClass = new JTextField();
+		txtUrlClass.setBounds(93, 96, 374, 20);
+		contentPane.add(txtUrlClass);
+		txtUrlClass.setColumns(10);
+
+		JLabel lblWeek = new JLabel("Week");
+		lblWeek.setBounds(519, 99, 46, 14);
+		contentPane.add(lblWeek);
+
+		comboWeek.setBounds(563, 95, 107, 22);
+		for (int i = 1; i <= 35; i++) {
+			comboWeek.addItem(i);
+		}
+		contentPane.add(comboWeek);
 		setResizable(false);
 
 	}
@@ -319,7 +318,7 @@ public class Form2 extends JFrame {
 				// System.out.println(link.html());
 				Element absHrefElement = link.selectFirst("a");
 				String absHref = absHrefElement.attr("abs:href");
-//				System.out.println(absHref);
+				// System.out.println(absHref);
 				for (int i = 0; i < 50; i++) {
 					// TimeUnit.SECONDS.sleep(rd.nextInt(2));
 					String result = getQuestion(subjectWeek, absHref, userAgent);
@@ -344,7 +343,9 @@ public class Form2 extends JFrame {
 		Elements weeks = weeksDoc.select("div[class=list] a");
 		for (Element week : weeks) {
 			String absHrefWeek = week.attr("abs:href").toLowerCase();
-			getQuestionWeek(absHrefWeek, userAgent);
+			String[] temp = absHrefWeek.split("week=", 2);
+			if (Integer.parseInt(temp[1]) >= (comboWeek.getSelectedIndex() + 1))
+				getQuestionWeek(absHrefWeek, userAgent);
 		}
 	}
 
@@ -649,5 +650,4 @@ public class Form2 extends JFrame {
 		return "";
 
 	}
-
 }
