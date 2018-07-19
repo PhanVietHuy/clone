@@ -78,6 +78,20 @@ public class Form2 extends JFrame {
 				Form2 frame = new Form2();
 				frame.setVisible(true);
 				Connection.Response loginForm;
+				try {
+					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3919")
+							.userAgent(userAgent).method(Connection.Method.GET).execute();
+					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3919")
+							.cookies(response.cookies()).userAgent(userAgent)
+							.data("LoginForm[username]", "ngothuylinh1", "LoginForm[password]", "0969167445")
+							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
+							.followRedirects(true).timeout(30 * 1000).execute();
+					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
+							.userAgent(userAgent).timeout(30 * 1000).get();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -164,7 +178,7 @@ public class Form2 extends JFrame {
 							.followRedirects(true).timeout(30 * 1000).execute();
 					pageUrl = Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
 							.timeout(30 * 1000).get();
-					System.out.println(pageUrl.html());
+					// System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
 					// System.out.println(pageElement.html());
@@ -620,21 +634,19 @@ public class Form2 extends JFrame {
 				Document pages = Jsoup.connect(url).cookies(response.cookies()).userAgent(userAgent).timeout(300 * 1000)
 						.get();
 				if (!thematic[0].equals("Môn Toán") && !thematic[0].equals("Môn Toán Apmops")) {
-					// System.out.println(page.html());
 					Element checkElement = pages.selectFirst("div[class=header]");
+//					System.out.println(pages.html());
 					if (checkElement != null) {
 						Element checkImg = checkElement.selectFirst("img");
 						// System.out.println(checkImg.html());
 						String imgCheck = checkImg.attr("src");
 						String absHref = "";
-						// System.out.println("img: "+imgCheck);
 						if (imgCheck.equals("/images/female_finish_challenge_200x188.jpg")) {
 							// System.out.println(imgCheck);
 							// TimeUnit.SECONDS.sleep(5);
 							Element pageChange = checkElement.selectFirst("a");
 							absHref = pageChange.attr("abs:href");
-							// System.out.println("Link: "+absHref);
-							TimeUnit.SECONDS.sleep(8);
+//							 System.out.println("Link: "+absHref);
 							getQuestion(subjectWeek, absHref, userAgent);
 							TimeUnit.SECONDS.sleep(8);
 							getQuestion(subjectWeek, absHref, userAgent);
