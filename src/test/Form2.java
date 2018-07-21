@@ -520,18 +520,18 @@ public class Form2 extends JFrame {
 				answerString += "\"" + (i + 1) + "\":\"" + answerArray.get(i) + end;
 			}
 
-			// System.out.println("Content: " + content);
-			// System.out.println("thematic_type: " + thematic_type);
-			// System.out.println("thematic_title: " + thematic_title);
-			// System.out.println("explain: " + giaithich);
-			// System.out.println("hint : " + hint);
-			// System.out.println("answer: " + answerString);
-			// System.out.println("answer_correct: " + correctAnswerString);
-			// System.out.println("question_type: " + typeString);
-			// System.out.println("class_title: " + comboBox.getSelectedItem().toString());
-			// System.out.println("subject_title: " + thematic[0]);
-			// System.out.println("week_title: " + thematic[1]);
-			// System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
+//			 System.out.println("Content: " + content);
+//			 System.out.println("thematic_type: " + thematic_type);
+//			 System.out.println("thematic_title: " + thematic_title);
+//			 System.out.println("explain: " + giaithich);
+//			 System.out.println("hint : " + hint);
+//			 System.out.println("answer: " + answerString);
+//			 System.out.println("answer_correct: " + correctAnswerString);
+//			 System.out.println("question_type: " + typeString);
+//			 System.out.println("class_title: " + comboBox.getSelectedItem().toString());
+//			 System.out.println("subject_title: " + thematic[0]);
+//			 System.out.println("week_title: " + thematic[1]);
+//			 System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
 
 			Document postData = Jsoup.connect("http://schoolkid.tigerweb.vn/admin/ajax-question/clone")
 					.data("id", id_ques_string).data("content", content)
@@ -623,11 +623,18 @@ public class Form2 extends JFrame {
 
 			}
 			return postData.text();
+		} catch (org.jsoup.HttpStatusException e) {
+			System.out.println("Web A Việt lỗi rồi");
+			System.out.println("Lỗi: " + e);
+			return "Lỗi rồi";
 		} catch (java.io.IOException e) {
 			System.out.println("Web lỗi rồi");
+			System.out.println("Lỗi: " + e);
 			return "Lỗi rồi";
 		} catch (java.lang.NullPointerException e) {
 			System.out.println("nullPointer: " + point);
+			System.out.println("Lỗi: " + e);
+
 			if (point == 100) {
 				return "Hoàn thành";
 			} else {
@@ -635,7 +642,7 @@ public class Form2 extends JFrame {
 						.get();
 				if (!thematic[0].equals("Môn Toán") && !thematic[0].equals("Môn Toán Apmops")) {
 					Element checkElement = pages.selectFirst("div[class=header]");
-//					System.out.println(pages.html());
+					// System.out.println(pages.html());
 					if (checkElement != null) {
 						Element checkImg = checkElement.selectFirst("img");
 						// System.out.println(checkImg.html());
@@ -646,7 +653,7 @@ public class Form2 extends JFrame {
 							// TimeUnit.SECONDS.sleep(5);
 							Element pageChange = checkElement.selectFirst("a");
 							absHref = pageChange.attr("abs:href");
-//							 System.out.println("Link: "+absHref);
+							// System.out.println("Link: "+absHref);
 							getQuestion(subjectWeek, absHref, userAgent);
 							TimeUnit.SECONDS.sleep(8);
 							getQuestion(subjectWeek, absHref, userAgent);
