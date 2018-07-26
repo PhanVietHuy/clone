@@ -94,6 +94,8 @@ public class Form2 extends JFrame {
 	 * Create the frame.
 	 */
 	public Form2() {
+		setResizable(false);
+
 		setBounds(100, 100, 831, 304);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -167,29 +169,29 @@ public class Form2 extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				try {
-					String responseUrl = "https://hocsinh.lika.edu.vn/site/login?student_id=3920";
-					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
-					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", "ngoquoclong", "LoginForm[password]", "0969167445")
-							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
-							.followRedirects(true).timeout(30 * 1000).execute();
-					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
-							.userAgent(userAgent).timeout(30 * 1000).get();
-					// String responseUrl = txtUrl.getText();
-					// response =
-					// Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
-					// response =
-					// Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-					// .data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
-					// passwordField.getText())
-					// .data("save_login",
-					// "1").followRedirects(false).method(Connection.Method.POST)
-					// .followRedirects(true).timeout(30 * 1000).execute();
+//					String responseUrl = "https://hocsinh.lika.edu.vn/site/login?student_id=3920";
+//					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
+//					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
+//							.data("LoginForm[username]", "ngoquoclong", "LoginForm[password]", "0969167445")
+//							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
+//							.followRedirects(true).timeout(30 * 1000).execute();
+//					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
+//							.userAgent(userAgent).timeout(30 * 1000).get();
+					 String responseUrl = txtUrl.getText();
+					 response =
+					 Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
+					 response =
+					 Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
+					 .data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
+					 passwordField.getText())
+					 .data("save_login",
+					 "1").followRedirects(false).method(Connection.Method.POST)
+					 .followRedirects(true).timeout(30 * 1000).execute();
 
-					// pageUrl =
-					// Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
-					// .timeout(30 * 1000).get();
-					// System.out.println(pageUrl.html());
+					 pageUrl =
+					 Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
+					 .timeout(30 * 1000).get();
+					 System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
 					// System.out.println(pageElement.html());
