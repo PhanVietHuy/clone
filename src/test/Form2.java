@@ -37,7 +37,6 @@ import javax.swing.Box;
 import javax.swing.JList;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import javafx.scene.control.PasswordField;
 
@@ -74,25 +73,8 @@ public class Form2 extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-
 				Form2 frame = new Form2();
 				frame.setVisible(true);
-				Connection.Response loginForm;
-				try {
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3919")
-							.userAgent(userAgent).method(Connection.Method.GET).execute();
-					response = Jsoup.connect("https://hocsinh.lika.edu.vn/site/login?student_id=3919")
-							.cookies(response.cookies()).userAgent(userAgent)
-							.data("LoginForm[username]", "ngothuylinh1", "LoginForm[password]", "0969167445")
-							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
-							.followRedirects(true).timeout(30 * 1000).execute();
-					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
-							.userAgent(userAgent).timeout(30 * 1000).get();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 			}
 		});
 	}
@@ -520,18 +502,18 @@ public class Form2 extends JFrame {
 				answerString += "\"" + (i + 1) + "\":\"" + answerArray.get(i) + end;
 			}
 
-//			 System.out.println("Content: " + content);
-//			 System.out.println("thematic_type: " + thematic_type);
-//			 System.out.println("thematic_title: " + thematic_title);
-//			 System.out.println("explain: " + giaithich);
-//			 System.out.println("hint : " + hint);
-//			 System.out.println("answer: " + answerString);
-//			 System.out.println("answer_correct: " + correctAnswerString);
-//			 System.out.println("question_type: " + typeString);
-//			 System.out.println("class_title: " + comboBox.getSelectedItem().toString());
-//			 System.out.println("subject_title: " + thematic[0]);
-//			 System.out.println("week_title: " + thematic[1]);
-//			 System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
+			// System.out.println("Content: " + content);
+			// System.out.println("thematic_type: " + thematic_type);
+			// System.out.println("thematic_title: " + thematic_title);
+			// System.out.println("explain: " + giaithich);
+			// System.out.println("hint : " + hint);
+			// System.out.println("answer: " + answerString);
+			// System.out.println("answer_correct: " + correctAnswerString);
+			// System.out.println("question_type: " + typeString);
+			// System.out.println("class_title: " + comboBox.getSelectedItem().toString());
+			// System.out.println("subject_title: " + thematic[0]);
+			// System.out.println("week_title: " + thematic[1]);
+			// System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
 
 			Document postData = Jsoup.connect("http://schoolkid.tigerweb.vn/admin/ajax-question/clone")
 					.data("id", id_ques_string).data("content", content)
