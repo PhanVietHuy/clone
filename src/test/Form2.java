@@ -117,12 +117,12 @@ public class Form2 extends JFrame {
 		contentPane.add(lblUsername);
 
 		txtUser = new JTextField();
-		txtUser.setBounds(148, 52, 191, 20);
+		txtUser.setBounds(148, 52, 263, 20);
 		contentPane.add(txtUser);
 		txtUser.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Mật khẩu");
-		lblPassword.setBounds(412, 55, 61, 14);
+		lblPassword.setBounds(10, 96, 61, 14);
 		contentPane.add(lblPassword);
 
 		JLabel lblClass = new JLabel("Lớp");
@@ -138,7 +138,6 @@ public class Form2 extends JFrame {
 		comboBox.addItem("4");
 		comboBox.addItem("5");
 		((JLabel) comboBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-
 
 		// lblTenMonHoc.setText("aaaaaa");
 
@@ -179,18 +178,14 @@ public class Form2 extends JFrame {
 				}
 			}
 		});
-		btnAllCB.setBounds(340, 186, 133, 21);
+		btnAllCB.setBounds(340, 186, 163, 21);
 		btnAllCB.setVisible(false);
 		contentPane.add(btnAllCB);
 		JButton btnSubmit = new JButton("Xác nhận");
-		btnSubmit.setBounds(683, 33, 92, 58);
+		btnSubmit.setBounds(686, 11, 92, 99);
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				comboChuongtrinh.enable();
-				comboMonhoc.enable();
-				btnAllCB.setVisible(true);
-				btnSearch.setVisible(true);
 				try {
 					// String responseUrl =
 					// "https://hocsinh.lika.edu.vn/site/login?student_id=3920";
@@ -213,8 +208,17 @@ public class Form2 extends JFrame {
 									passwordField.getText())
 							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
 							.followRedirects(true).timeout(30 * 1000).execute();
-					pageUrl = Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
-							.timeout(30 * 1000).get();
+					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
+							.userAgent(userAgent).timeout(30 * 1000).get();
+					System.err.println(response.statusCode());
+					if (response.statusCode() == 200) {
+						comboChuongtrinh.setVisible(true);
+						comboMonhoc.setVisible(true);
+						lblChonMonHoc.setVisible(true);
+						lblChonChuongTrinh.setVisible(true);
+						btnAllCB.setVisible(true);
+						btnSearch.setVisible(true);
+					}
 					// System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
@@ -239,7 +243,6 @@ public class Form2 extends JFrame {
 						comboMonhoc.addItem(listName.get(i));
 						hrefName.put(listName.get(i), listHref.get(i));
 					}
-					System.err.println(response.statusCode());
 					txtKqMonhoc.setVisible(true);
 					txtCount.setVisible(true);
 					lblKetQua.setVisible(true);
@@ -253,20 +256,21 @@ public class Form2 extends JFrame {
 		contentPane.add(btnSubmit);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(470, 52, 191, 20);
+		passwordField.setBounds(148, 93, 263, 20);
 		contentPane.add(passwordField);
 
 		comboMonhoc.setBounds(127, 187, 181, 20);
 		contentPane.add(comboMonhoc);
 		((JLabel) comboMonhoc.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-		comboMonhoc.disable();
+		comboMonhoc.setVisible(false);
+
 		comboChuongtrinh = new JComboBox();
 		comboChuongtrinh.setBounds(127, 156, 181, 20);
 		contentPane.add(comboChuongtrinh);
 		comboChuongtrinh.addItem("Chương trình cơ bản");
 		comboChuongtrinh.addItem("Chương trình nâng cao");
 		((JLabel) comboChuongtrinh.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-		comboChuongtrinh.disable();
+		comboChuongtrinh.setVisible(false);
 
 		comboChuongtrinh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -309,10 +313,12 @@ public class Form2 extends JFrame {
 
 		lblChonChuongTrinh = new JLabel("Chọn chương trình");
 		lblChonChuongTrinh.setBounds(10, 159, 122, 14);
+		lblChonChuongTrinh.setVisible(false);
 		contentPane.add(lblChonChuongTrinh);
 
 		lblChonMonHoc = new JLabel("Chọn môn học");
 		lblChonMonHoc.setBounds(10, 190, 122, 14);
+		lblChonMonHoc.setVisible(false);
 		contentPane.add(lblChonMonHoc);
 
 		btnSearch = new JButton("Tìm theo môn học");
@@ -339,24 +345,24 @@ public class Form2 extends JFrame {
 
 			}
 		});
-		btnSearch.setBounds(340, 155, 133, 23);
+		btnSearch.setBounds(340, 155, 163, 23);
 		btnSearch.setVisible(false);
 		contentPane.add(btnSearch);
 
 		JLabel lblLinkClass = new JLabel("Đường dẫn lớp");
 		lblLinkClass.setBounds(10, 99, 92, 14);
-		contentPane.add(lblLinkClass);
+		// contentPane.add(lblLinkClass);
 
 		txtUrlClass = new JTextField();
 		txtUrlClass.setBounds(148, 96, 288, 20);
-		contentPane.add(txtUrlClass);
+		// contentPane.add(txtUrlClass);
 		txtUrlClass.setColumns(10);
 
 		JLabel lblWeek = new JLabel("Từ tuần");
-		lblWeek.setBounds(464, 99, 49, 14);
+		lblWeek.setBounds(454, 55, 49, 14);
 		contentPane.add(lblWeek);
 
-		comboWeekFrom.setBounds(513, 97, 40, 18);
+		comboWeekFrom.setBounds(504, 53, 40, 18);
 		for (int i = 1; i <= 35; i++) {
 			comboWeekFrom.addItem(i);
 		}
@@ -402,11 +408,11 @@ public class Form2 extends JFrame {
 		txtKqMonhoc.setEditable(false);
 
 		JLabel lblTo = new JLabel("đến tuần");
-		lblTo.setBounds(565, 99, 49, 14);
+		lblTo.setBounds(565, 56, 49, 14);
 		contentPane.add(lblTo);
 
 		comboWeekTo = new JComboBox<Object>();
-		comboWeekTo.setBounds(621, 98, 40, 18);
+		comboWeekTo.setBounds(621, 55, 40, 18);
 		contentPane.add(comboWeekTo);
 
 		lblCham = new JLabel(cham);
