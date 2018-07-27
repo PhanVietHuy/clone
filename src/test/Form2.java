@@ -3,6 +3,7 @@ package test;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import javafx.scene.control.PasswordField;
 
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import java.awt.Color;
 
 public class Form2 extends JFrame {
 
@@ -77,6 +79,9 @@ public class Form2 extends JFrame {
 	private JLabel lblMonhoc;
 	private JLabel lblKetQua;
 	private static JComboBox<Object> comboWeekTo;
+	private static JLabel lbldangChay;
+	private static JLabel lblCham;
+	static String cham = "";
 
 	/**
 	 * Launch the application.
@@ -96,13 +101,13 @@ public class Form2 extends JFrame {
 	public Form2() {
 		setResizable(false);
 
-		setBounds(100, 100, 831, 304);
+		setBounds(100, 100, 804, 304);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblUsername = new JLabel("Username");
+		JLabel lblUsername = new JLabel("Tài khoản");
 		lblUsername.setBounds(10, 55, 71, 14);
 		contentPane.add(lblUsername);
 
@@ -137,21 +142,30 @@ public class Form2 extends JFrame {
 		contentPane.add(lblUrl);
 
 		txtUrl = new JTextField();
-		txtUrl.setBounds(93, 11, 374, 20);
+		txtUrl.setBounds(91, 11, 374, 20);
 		contentPane.add(txtUrl);
 		txtUrl.setColumns(10);
-
+		lbldangChay = new JLabel("Đang chạy");
+		lbldangChay.setForeground(Color.GRAY);
+		lbldangChay.setBounds(10, 240, 71, 14);
+		contentPane.add(lbldangChay);
+		lbldangChay.setVisible(false);
 		JButton btnAllCB = new JButton("Search All");
 		btnAllCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				lbldangChay.setVisible(true);
+				lbldangChay.paintImmediately(lbldangChay.getVisibleRect());
+
+				lblCham.setVisible(true);
 				for (int i = 0; i < listName.size(); i++) {
 					try {
 						txtKqMonhoc.setText(listName.get(i));
 						txtKqMonhoc.paintImmediately(txtKqMonhoc.getVisibleRect());
 						lblKetQua.setText("Tổng số lượng");
 						lblKetQua.paintImmediately(lblKetQua.getVisibleRect());
-
 						getQuestionAllWeek(hrefName.get(listName.get(i)), userAgent);
+						System.exit(0);
+
 					} catch (IOException | JSONException | InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -187,11 +201,11 @@ public class Form2 extends JFrame {
 					 .data("save_login",
 					 "1").followRedirects(false).method(Connection.Method.POST)
 					 .followRedirects(true).timeout(30 * 1000).execute();
-
+					
 					 pageUrl =
 					 Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
 					 .timeout(30 * 1000).get();
-					 System.out.println(pageUrl.html());
+//					 System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
 					// System.out.println(pageElement.html());
@@ -224,7 +238,6 @@ public class Form2 extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
 		});
 		contentPane.add(btnSubmit);
@@ -297,12 +310,16 @@ public class Form2 extends JFrame {
 				// System.out.println(hrefName.get(comboMonhoc.getSelectedItem()));
 				// System.out.println(hrefName.get(comboMonhoc.getSelectedItem()));
 				// System.out.println(Integer.toString(thematic_type));
+				lblCham.setVisible(true);
+				lbldangChay.setVisible(true);
+				lbldangChay.paintImmediately(lbldangChay.getVisibleRect());
 				try {
 					// System.out.println("ComboBox: " + comboBox.getSelectedItem().toString());
 					// System.out.println(hrefName.get(comboMonhoc.getSelectedItem()));
 					txtKqMonhoc.setText((String) comboMonhoc.getSelectedItem());
 					txtKqMonhoc.paintImmediately(txtKqMonhoc.getVisibleRect());
 					getQuestionAllWeek(hrefName.get(comboMonhoc.getSelectedItem()), userAgent);
+					System.exit(0);
 
 				} catch (IOException | JSONException | InterruptedException e1) {
 					// TODO Auto-generated catch block
@@ -319,15 +336,15 @@ public class Form2 extends JFrame {
 		contentPane.add(lblLinkClass);
 
 		txtUrlClass = new JTextField();
-		txtUrlClass.setBounds(93, 96, 327, 20);
+		txtUrlClass.setBounds(91, 96, 327, 20);
 		contentPane.add(txtUrlClass);
 		txtUrlClass.setColumns(10);
 
-		JLabel lblWeek = new JLabel("From");
-		lblWeek.setBounds(453, 99, 34, 14);
+		JLabel lblWeek = new JLabel("Từ tuần");
+		lblWeek.setBounds(464, 99, 49, 14);
 		contentPane.add(lblWeek);
 
-		comboWeekFrom.setBounds(486, 97, 61, 18);
+		comboWeekFrom.setBounds(513, 97, 40, 18);
 		for (int i = 1; i <= 35; i++) {
 			comboWeekFrom.addItem(i);
 		}
@@ -345,13 +362,13 @@ public class Form2 extends JFrame {
 		contentPane.add(comboWeekFrom);
 
 		lblKetQua = new JLabel("Số lượng");
-		lblKetQua.setBounds(657, 160, 79, 14);
+		lblKetQua.setBounds(656, 159, 92, 14);
 		contentPane.add(lblKetQua);
 		lblKetQua.setVisible(false);
 		lblKetQua.setHorizontalAlignment(SwingConstants.CENTER);
 
 		txtCount = new JTextField();
-		txtCount.setBounds(673, 189, 46, 20);
+		txtCount.setBounds(679, 187, 46, 22);
 		contentPane.add(txtCount);
 		txtCount.setColumns(10);
 		txtCount.setHorizontalAlignment(SwingConstants.CENTER);
@@ -366,22 +383,27 @@ public class Form2 extends JFrame {
 
 		txtKqMonhoc = new JTextField();
 		txtKqMonhoc.setText("Tên môn học");
-		txtKqMonhoc.setBounds(521, 188, 107, 23);
+		txtKqMonhoc.setBounds(521, 188, 107, 21);
 		contentPane.add(txtKqMonhoc);
 		txtKqMonhoc.setColumns(10);
 		txtKqMonhoc.setHorizontalAlignment(SwingConstants.CENTER);
 		txtKqMonhoc.setEditable(false);
 
-		JLabel lblTo = new JLabel("To");
-		lblTo.setBounds(577, 99, 26, 14);
+		JLabel lblTo = new JLabel("đến tuần");
+		lblTo.setBounds(565, 99, 49, 14);
 		contentPane.add(lblTo);
 
 		comboWeekTo = new JComboBox<Object>();
-		comboWeekTo.setBounds(600, 98, 61, 18);
+		comboWeekTo.setBounds(621, 98, 40, 18);
 		contentPane.add(comboWeekTo);
-		
-		for(int i = 1; i<36;i++)
-		{
+
+		lblCham = new JLabel(cham);
+		lblCham.setForeground(Color.GRAY);
+		lblCham.setBounds(72, 240, 46, 14);
+		contentPane.add(lblCham);
+		lblCham.setVisible(false);
+
+		for (int i = 1; i < 36; i++) {
 			comboWeekTo.addItem(i);
 		}
 		((JLabel) comboWeekTo.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -411,18 +433,32 @@ public class Form2 extends JFrame {
 				String absHref = absHrefElement.attr("abs:href");
 				// System.out.println(absHref);
 				for (int i = 0; i < 50; i++) {
-
-					// TimeUnit.SECONDS.sleep(rd.nextInt(2));
-					String result = getQuestion(subjectWeek, absHref, userAgent);
-					if (result.equals("true")) {
-						count++;
-						txtCount.setText(Integer.toString(count));
-						txtCount.paintImmediately(txtCount.getVisibleRect());
+//					TimeUnit.SECONDS.sleep(2);
+					if (cham == ".")
+						cham = "..";
+					else {
+						if (cham == "..")
+							cham = "...";
+						else {
+							if (cham == "...")
+								cham = "";
+							else
+								cham = ".";
+						}
 					}
+					lblCham.setText(cham);
+					lblCham.paintImmediately(lblCham.getVisibleRect());
+					 String result = getQuestion(subjectWeek, absHref, userAgent);
 
-					if (result.equals("Lỗi rồi") || result.equals("Chuyển hướng") || result.equals("Hoàn thành"))
-						break;
-					System.out.println("-----------------------------------------------------------------------");
+					 if (result.equals("true")) {
+					 count++;
+					 txtCount.setText(Integer.toString(count));
+					 txtCount.paintImmediately(txtCount.getVisibleRect());
+					 }
+					 if (result.equals("Lỗi rồi") || result.equals("Chuyển hướng") ||
+					 result.equals("Hoàn thành"))
+					 break;
+					 System.out.println("-----------------------------------------------------------------------");
 				}
 			}
 		}
@@ -440,8 +476,9 @@ public class Form2 extends JFrame {
 		for (Element week : weeks) {
 			String absHrefWeek = week.attr("abs:href").toLowerCase();
 			String[] temp = absHrefWeek.split("week=", 2);
-			if (Integer.parseInt(temp[1]) >= (comboWeekFrom.getSelectedIndex() + 1) && Integer.parseInt(temp[1])<=((int)comboWeekTo.getSelectedItem()))
-//				System.out.println(Integer.parseInt(temp[1]));
+			if (Integer.parseInt(temp[1]) >= (comboWeekFrom.getSelectedIndex() + 1)
+					&& Integer.parseInt(temp[1]) <= ((int) comboWeekTo.getSelectedItem()))
+				// System.out.println(Integer.parseInt(temp[1]));
 				getQuestionWeek(absHrefWeek, userAgent);
 		}
 	}
