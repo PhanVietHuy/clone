@@ -82,6 +82,11 @@ public class Form2 extends JFrame {
 	private static JLabel lbldangChay;
 	private static JLabel lblCham;
 	static String cham = "";
+	private JLabel lblChonChuongTrinh;
+	private JLabel lblChonMonHoc;
+	private JComboBox comboChuongtrinh;
+	private JButton btnSearch;
+	private JButton btnAllCB;
 
 	/**
 	 * Launch the application.
@@ -120,29 +125,28 @@ public class Form2 extends JFrame {
 		lblPassword.setBounds(359, 55, 61, 14);
 		contentPane.add(lblPassword);
 
-		JLabel lblClass = new JLabel("Class");
-		lblClass.setBounds(533, 14, 34, 14);
+		JLabel lblClass = new JLabel("Lớp");
+		lblClass.setBounds(569, 14, 34, 14);
 		contentPane.add(lblClass);
 
-		comboBox.setBounds(577, 11, 84, 20);
-		((JLabel) comboBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		comboBox.setBounds(600, 11, 61, 20);
 
 		contentPane.add(comboBox);
-		comboBox.addItem("Lớp 1");
-		comboBox.addItem("Lớp 2");
-		comboBox.addItem("Lớp 3");
-		comboBox.addItem("Lớp 4");
-		comboBox.addItem("Lớp 5");
+		comboBox.addItem("1");
+		comboBox.addItem("2");
+		comboBox.addItem("3");
+		comboBox.addItem("4");
+		comboBox.addItem("5");
 		((JLabel) comboBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
 		// lblTenMonHoc.setText("aaaaaa");
 
-		JLabel lblUrl = new JLabel("Link Website");
+		JLabel lblUrl = new JLabel("Link trang web");
 		lblUrl.setBounds(10, 14, 92, 14);
 		contentPane.add(lblUrl);
 
 		txtUrl = new JTextField();
-		txtUrl.setBounds(91, 11, 374, 20);
+		txtUrl.setBounds(91, 11, 433, 20);
 		contentPane.add(txtUrl);
 		txtUrl.setColumns(10);
 		lbldangChay = new JLabel("Đang chạy");
@@ -150,7 +154,7 @@ public class Form2 extends JFrame {
 		lbldangChay.setBounds(10, 240, 71, 14);
 		contentPane.add(lbldangChay);
 		lbldangChay.setVisible(false);
-		JButton btnAllCB = new JButton("Search All");
+		btnAllCB = new JButton("Search All");
 		btnAllCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				lbldangChay.setVisible(true);
@@ -175,37 +179,42 @@ public class Form2 extends JFrame {
 			}
 		});
 		btnAllCB.setBounds(340, 186, 102, 23);
+		btnAllCB.setVisible(false);
 		contentPane.add(btnAllCB);
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setBounds(683, 33, 92, 58);
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				comboChuongtrinh.enable();
+				comboMonhoc.enable();
+				btnAllCB.setVisible(true);
+				btnSearch.setVisible(true);
 				try {
-//					String responseUrl = "https://hocsinh.lika.edu.vn/site/login?student_id=3920";
-//					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
-//					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-//							.data("LoginForm[username]", "ngoquoclong", "LoginForm[password]", "0969167445")
-//							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
-//							.followRedirects(true).timeout(30 * 1000).execute();
-//					pageUrl = Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
-//							.userAgent(userAgent).timeout(30 * 1000).get();
-					 String responseUrl = txtUrl.getText();
-					 response =
-					 Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
-					 response =
-					 Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
-					 .data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
-					 passwordField.getText())
-					 .data("save_login",
-					 "1").followRedirects(false).method(Connection.Method.POST)
-					 .followRedirects(true).timeout(30 * 1000).execute();
-					
-					 pageUrl =
-					 Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
-					 .timeout(30 * 1000).get();
-//					 System.out.println(pageUrl.html());
+					// String responseUrl =
+					// "https://hocsinh.lika.edu.vn/site/login?student_id=3920";
+					// response =
+					// Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
+					// response =
+					// Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
+					// .data("LoginForm[username]", "ngoquoclong", "LoginForm[password]",
+					// "0969167445")
+					// .data("save_login",
+					// "1").followRedirects(false).method(Connection.Method.POST)
+					// .followRedirects(true).timeout(30 * 1000).execute();
+					// pageUrl =
+					// Jsoup.connect("https://hocsinh.lika.edu.vn/classroom/detail").cookies(response.cookies())
+					// .userAgent(userAgent).timeout(30 * 1000).get();
+					String responseUrl = txtUrl.getText();
+					response = Jsoup.connect(responseUrl).userAgent(userAgent).method(Connection.Method.GET).execute();
+					response = Jsoup.connect(responseUrl).cookies(response.cookies()).userAgent(userAgent)
+							.data("LoginForm[username]", txtUser.getText(), "LoginForm[password]",
+									passwordField.getText())
+							.data("save_login", "1").followRedirects(false).method(Connection.Method.POST)
+							.followRedirects(true).timeout(30 * 1000).execute();
+					pageUrl = Jsoup.connect(txtUrlClass.getText()).cookies(response.cookies()).userAgent(userAgent)
+							.timeout(30 * 1000).get();
+					// System.out.println(pageUrl.html());
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
 					// System.out.println(pageElement.html());
@@ -249,13 +258,14 @@ public class Form2 extends JFrame {
 		comboMonhoc.setBounds(127, 187, 181, 20);
 		contentPane.add(comboMonhoc);
 		((JLabel) comboMonhoc.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-
-		JComboBox comboChuongtrinh = new JComboBox();
+		comboMonhoc.disable();
+		comboChuongtrinh = new JComboBox();
 		comboChuongtrinh.setBounds(127, 156, 181, 20);
 		contentPane.add(comboChuongtrinh);
 		comboChuongtrinh.addItem("Chương trình cơ bản");
 		comboChuongtrinh.addItem("Chương trình nâng cao");
 		((JLabel) comboChuongtrinh.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		comboChuongtrinh.disable();
 
 		comboChuongtrinh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -296,15 +306,15 @@ public class Form2 extends JFrame {
 			}
 		});
 
-		JLabel lblChonChuongTrinh = new JLabel("Chọn chương trình");
+		lblChonChuongTrinh = new JLabel("Chọn chương trình");
 		lblChonChuongTrinh.setBounds(10, 159, 122, 14);
 		contentPane.add(lblChonChuongTrinh);
 
-		JLabel lblChonMonHoc = new JLabel("Chọn môn học");
+		lblChonMonHoc = new JLabel("Chọn môn học");
 		lblChonMonHoc.setBounds(10, 190, 122, 14);
 		contentPane.add(lblChonMonHoc);
 
-		JButton btnSearch = new JButton("Search");
+		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(hrefName.get(comboMonhoc.getSelectedItem()));
@@ -329,6 +339,7 @@ public class Form2 extends JFrame {
 			}
 		});
 		btnSearch.setBounds(340, 155, 102, 23);
+		btnSearch.setVisible(false);
 		contentPane.add(btnSearch);
 
 		JLabel lblLinkClass = new JLabel("Link Class");
@@ -433,7 +444,7 @@ public class Form2 extends JFrame {
 				String absHref = absHrefElement.attr("abs:href");
 				// System.out.println(absHref);
 				for (int i = 0; i < 50; i++) {
-//					TimeUnit.SECONDS.sleep(2);
+					// TimeUnit.SECONDS.sleep(2);
 					if (cham == ".")
 						cham = "..";
 					else {
@@ -448,17 +459,16 @@ public class Form2 extends JFrame {
 					}
 					lblCham.setText(cham);
 					lblCham.paintImmediately(lblCham.getVisibleRect());
-					 String result = getQuestion(subjectWeek, absHref, userAgent);
+					String result = getQuestion(subjectWeek, absHref, userAgent);
 
-					 if (result.equals("true")) {
-					 count++;
-					 txtCount.setText(Integer.toString(count));
-					 txtCount.paintImmediately(txtCount.getVisibleRect());
-					 }
-					 if (result.equals("Lỗi rồi") || result.equals("Chuyển hướng") ||
-					 result.equals("Hoàn thành"))
-					 break;
-					 System.out.println("-----------------------------------------------------------------------");
+					if (result.equals("true")) {
+						count++;
+						txtCount.setText(Integer.toString(count));
+						txtCount.paintImmediately(txtCount.getVisibleRect());
+					}
+					if (result.equals("Lỗi rồi") || result.equals("Chuyển hướng") || result.equals("Hoàn thành"))
+						break;
+					System.out.println("-----------------------------------------------------------------------");
 				}
 			}
 		}
