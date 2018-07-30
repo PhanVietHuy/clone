@@ -285,7 +285,7 @@ public class Form2 extends JFrame {
 
 					Element pageElement = pageUrl
 							.selectFirst("div[class=\"" + divName + "\"] ul[class=\"row align-items-center\"]");
-					// System.out.println(pageElement.html());
+//					 System.out.println(pageElement.html());
 					Elements hrefs = pageElement.select("a");
 					// System.out.println(hrefs.html());
 					listHref = new ArrayList<String>();
@@ -657,25 +657,25 @@ public class Form2 extends JFrame {
 				answerString += "\"" + (i + 1) + "\":\"" + answerArray.get(i) + end;
 			}
 
-			// System.out.println("Content: " + content);
-			// System.out.println("thematic_type: " + thematic_type);
-			// System.out.println("thematic_title: " + thematic_title);
-			// System.out.println("explain: " + giaithich);
-			// System.out.println("hint : " + hint);
-			// System.out.println("answer: " + answerString);
-			// System.out.println("answer_correct: " + correctAnswerString);
-			// System.out.println("question_type: " + typeString);
-			// System.out.println("class_title: " + comboBox.getSelectedItem().toString());
-			// System.out.println("subject_title: " + thematic[0]);
-			// System.out.println("week_title: " + thematic[1]);
-			// System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
+//			 System.out.println("Content: " + content);
+//			 System.out.println("thematic_type: " + thematic_type);
+//			 System.out.println("thematic_title: " + thematic_title);
+//			 System.out.println("explain: " + giaithich);
+//			 System.out.println("hint : " + hint);
+//			 System.out.println("answer: " + answerString);
+//			 System.out.println("answer_correct: " + correctAnswerString);
+//			 System.out.println("question_type: " + typeString);
+//			 System.out.println("class_title: Lớp " + comboBox.getSelectedItem().toString());
+//			 System.out.println("subject_title: " + thematic[0]);
+//			 System.out.println("week_title: " + thematic[1]);
+//			 System.out.println("TempAnswerCorrect: " + tempCorrectAnswerString);
 
 			Document postData = Jsoup.connect("http://schoolkid.tigerweb.vn/admin/ajax-question/clone")
 					.data("id", id_ques_string).data("content", content)
 					.data("thematic_type", Integer.toString(thematic_type)).data("thematic_title", thematic_title)
 					.data("explain", giaithich).data("hint", hint).data("answer", answerString)
 					.data("answer_correct", correctAnswerString).data("image", "").data("question_type", typeString)
-					.data("classroom_title", comboBox.getSelectedItem().toString()).data("subject_title", thematic[0])
+					.data("classroom_title", "Lớp "+comboBox.getSelectedItem().toString()).data("subject_title", thematic[0])
 					.data("week_title", thematic[1]).data("note", tempCorrectAnswerString).ignoreContentType(true)
 					.post();
 			if (postData.text().equals("true")) {
@@ -760,15 +760,18 @@ public class Form2 extends JFrame {
 
 			}
 			return postData.text();
-		} catch (org.jsoup.HttpStatusException e) {
+		}
+		catch (org.jsoup.HttpStatusException e) {
 			System.out.println("Web A Việt lỗi rồi");
 			System.out.println("Lỗi: " + e);
 			return "Lỗi rồi";
-		} catch (java.io.IOException e) {
+		} 
+		catch (java.io.IOException e) {
 			System.out.println("Web lỗi rồi");
 			System.out.println("Lỗi: " + e);
 			return "Lỗi rồi";
-		} catch (java.lang.NullPointerException e) {
+		}
+		catch (java.lang.NullPointerException e) {
 			System.out.println("nullPointer: " + point);
 			System.out.println("Lỗi: " + e);
 
